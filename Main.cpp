@@ -9,10 +9,11 @@ int main()
 
 	srand(time(NULL));
 	
+	setinfo_if_visible(0);
 	initSnake();
 	initFood();
 	initUI();
-	//haha();
+	initwall();
 
 	score = playGame();
 	initUI();

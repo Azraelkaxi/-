@@ -7,23 +7,23 @@ food_t food;
 score_t score = 0;
 
 
-//³õÊ¼»¯Éß¶ÔÏó
+//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ß¶ï¿½ï¿½ï¿½ 
 void initSnake()
 {
 	COORD pos_snake;
 
-	snake.size = 2;						//³õÊ¼»¯Éß³¤¶È
+	snake.size = 2;						//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ß³ï¿½ï¿½ï¿½
 
-	snake.body[0].X = WIDE / 2;			//³õÊ¼»¯ÉßÍ·
+	snake.body[0].X = WIDE / 2;			//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Í·
 	snake.body[0].Y = HIGH / 2;
 
-	snake.body[1].X = WIDE / 2 - 1;		//³õÊ¼»¯ÉßÉíÌå
+	snake.body[1].X = WIDE / 2 - 1;		//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	snake.body[1].Y = HIGH / 2;
 
 	
 }
 
-//³õÊ¼»¯Ê³Îï¶ÔÏó
+//ï¿½ï¿½Ê¼ï¿½ï¿½Ê³ï¿½ï¿½ï¿½ï¿½ï¿½
 void initFood()
 {
 	COORD pos_food;
@@ -33,13 +33,13 @@ void initFood()
 
 }
 
-//³õÊ¼»¯½»»¥½çÃæ
+//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void initUI()
 {
-	COORD pos_snake, pos_food, pos;
+	COORD pos_snake, pos_food;
 	int i;
 
-	//»­Éß
+	//ï¿½ï¿½ï¿½ï¿½
 
 	for (i = 0; i < snake.size; i++)
 	{
@@ -52,13 +52,25 @@ void initUI()
 			printf("o");
 	}
 
-	//»­Ê³Îï
+	//ï¿½ï¿½Ê³ï¿½ï¿½
 	pos_food.X = food.X;
 	pos_food.Y = food.Y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos_food);
 	printf("#");
 
-	//»­Ç½Ìå
+	//ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½
+	pos_food.X = 0;
+	pos_food.Y = HIGH + 2;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos_food);
+
+}
+
+//ï¿½ï¿½Ç½ï¿½ï¿½
+void initwall()
+{
+	COORD pos;
+
+	//ï¿½ï¿½Ç½ï¿½ï¿½
 	pos.X = 0;
 	pos.Y = 0;
 	for (size_t i = 0; i <= WIDE; i++)
@@ -92,33 +104,35 @@ void initUI()
 		pos.Y++;
 	}
 
-	//¹â±ê»Øµ½×îºó0
-	pos_food.X = 0;
-	pos_food.Y = HIGH + 2;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos_food);
-
+	//ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½
+	pos.X = 0;
+	pos.Y = HIGH + 2;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-//¿ªÊ¼ÓÎÏ·
+//ï¿½ï¿½Ê¼ï¿½ï¿½Ï·
 int playGame()
 {
 	char key = 'd';
 	char pkey = 'd';
 	int kx = 0, ky = 0;
+	COORD pos;
+	double speed = 100;
 
-	//ÅÐ¶ÏÉß×²Ç½
+	//ï¿½Ð¶ï¿½ï¿½ï¿½×²Ç½
 	while (snake.body[0].X > 0 && snake.body[0].X <= WIDE && snake.body[0].Y > 0 && snake.body[0].Y <= HIGH)
 	{
-		//¸üÐÂÊý¾Ý
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		initUI();
+		printf("speed:%.1f", speed);
 
-		//½ÓÊÕ¼üÅÌÊäÈë
+		//ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		if (_kbhit())
 		{
 			key = _getch();
 		}
 
-		//´¦ÀíÊäÈë°´¼ü
+		//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë°´ï¿½ï¿½
 		switch (key)
 		{
 		case 'w':
@@ -152,47 +166,69 @@ int playGame()
 			ky = 0;
 			pkey = key;
 			break;
+
 		}
 
-		//×²ÉíÌå
+		//×²ï¿½ï¿½ï¿½ï¿½
 		for (size_t i = 1; i < snake.size; i++)
 		{
 			if (snake.body[0].X == snake.body[i].X && snake.body[0].Y == snake.body[i].Y)
 				return score;
 		}
 
-		//ÉßÍ·×²Ê³Îï
+		//ï¿½ï¿½Í·×²Ê³ï¿½ï¿½
 		if (snake.body[0].X == food.X && snake.body[0].Y == food.Y)
 		{
-			initFood();		//Ê³ÎïÏûÊ§
-			snake.size++;	//ÉíÌåÔö³¤
-			score += 10;	//¼Ó·Ö
+			initFood();		//Ê³ï¿½ï¿½ï¿½ï¿½Ê§
+			snake.size++;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+			score += 10;	//ï¿½Ó·ï¿½
 
-			//¼ÓËÙ
+			//ï¿½ï¿½ï¿½ï¿½
+			speed -= 0.5;
 		}
 
-		//ÉßµÄÒÆ¶¯
-		//ÉßÉíÒÆ¶¯
+		//ï¿½ï¿½Â¼Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½ï¿½ï¿½
+		pos.X = snake.body[snake.size - 1].X;
+		pos.Y = snake.body[snake.size - 1].Y;
+
+		//ï¿½ßµï¿½ï¿½Æ¶ï¿½
+		//ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 		for (size_t i = snake.size - 1; i > 0; i--)
 		{
 			snake.body[i].X = snake.body[i - 1].X;
 			snake.body[i].Y = snake.body[i - 1].Y;
 		}
-		//ÉßÍ·ÒÆ¶¯
+		//ï¿½ï¿½Í·ï¿½Æ¶ï¿½
 		snake.body[0].X += kx;
 		snake.body[0].Y += ky;
 
-		//ÐÞ¸ÄÒ»Î»²Ù×÷µÄ×Ö·û
-		Sleep(100);
+		
+		//ï¿½ï¿½ï¿½ï¿½
+		Sleep(speed);
 
-		system("cls");
+		//É¾ï¿½ï¿½
+		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+		printf(" ");
+
+		//system("cls");
 	}
 
 	
 	return score;
 }
 
-void haha()
+//ï¿½ï¿½ï¿½Ã¹ï¿½ï¿½É¼ï¿½ï¿½ï¿½
+void setinfo_if_visible(int x)
+{
+	CONSOLE_CURSOR_INFO cci;
+
+	cci.dwSize = sizeof(cci);
+	cci.bVisible = x;
+
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
+}
+
+void strprintf()
 {
 	char str[] = "I love you!";
 	char* token, * context = NULL;

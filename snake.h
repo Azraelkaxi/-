@@ -49,10 +49,17 @@ void initFood();
 //初始化交互界面
 void initUI();
 
-//开始游戏
-int playGame();
+//开始游戏	
+int playGame();	
 
-void haha();
+//初始化墙体
+void initwall();
+
+//字符断开
+void strprintf();
+
+//设置光标可见性
+void setinfo_if_visible(int x);
 
 #endif // !__SNAKE_H__
 
